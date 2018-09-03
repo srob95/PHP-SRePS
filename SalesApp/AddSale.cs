@@ -18,7 +18,7 @@ namespace SalesApp
             InitializeComponent();
 
             DataTable dt = new DataTable();
-            sales_data.DataSource = dt;
+            SalesData.DataSource = dt;
 
             dt.Columns.Add("ItemNo");
             dt.Columns.Add("Description");
@@ -26,26 +26,26 @@ namespace SalesApp
             dt.Columns.Add("Qty");
             dt.Columns.Add("SubPrice");
 
-            sales_data.Columns["Description"].ReadOnly = true;
-            sales_data.Columns["Item Price"].ReadOnly = true;
-            sales_data.Columns["SubPrice"].ReadOnly = true;
+            SalesData.Columns["Description"].ReadOnly = true;
+            SalesData.Columns["Item Price"].ReadOnly = true;
+            SalesData.Columns["SubPrice"].ReadOnly = true;
 
-            sales_data.Columns["ItemNo"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            sales_data.Columns["Description"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            sales_data.Columns["Item Price"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            sales_data.Columns["Qty"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            sales_data.Columns["SubPrice"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            SalesData.Columns["ItemNo"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            SalesData.Columns["Description"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            SalesData.Columns["Item Price"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            SalesData.Columns["Qty"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            SalesData.Columns["SubPrice"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
         private void data_changed(object sender, DataGridViewCellEventArgs e)
         {
-            DataTable dt = sales_data.DataSource as DataTable;
-            update_row_info(sales_data.DataSource as DataTable, e.RowIndex);
+            DataTable dt = SalesData.DataSource as DataTable;
+            update_row_info(SalesData.DataSource as DataTable, e.RowIndex);
         }
 
         private void data_row_added(object sender, DataGridViewRowsAddedEventArgs e)
         {
-            update_row_info(sales_data.DataSource as DataTable, e.RowIndex);
+            update_row_info(SalesData.DataSource as DataTable, e.RowIndex);
         }
 
         private void update_row_info(DataTable dt, int row)
@@ -62,7 +62,7 @@ namespace SalesApp
                 int qty;
                 try {
                     qty = Int32.Parse(dt.Rows[row]["Qty"].ToString());
-                } catch (FormatException e)
+                } catch (FormatException)
                 {
                     qty = 1;
                     dt.Rows[row]["Qty"] = qty;
@@ -70,11 +70,34 @@ namespace SalesApp
                 float subPrice = price * qty;
                 dt.Rows[row]["SubPrice"] = subPrice;
             }
+
+            update_totals_info(dt);
+        }
+
+        private void update_totals_info(DataTable dt)
+        {
+            double sum = 0.0;
+            foreach (DataRow row in dt.Rows)
+            {
+                String s_value = row["SubPrice"].ToString();
+                double value = Double.Parse(s_value); // since we set s_value, this should never crash...
+                sum += value;
+            }
+
+            // TODO refractor these calcs into a new function and unit test it.
+            // Make sure that it's not possible to be sub-cents in the calcs
+            // Also, unit test that the sum is calculated right
+            double tax = Math.Floor(sum * 100 * 0.1) / 100; // assume tax is 10%
+            double total = tax + sum;
+
+            SubTotalValue.Text = sum.ToString();
+            TaxValue.Text = tax.ToString();
+            TotalValue.Text = total.ToString();
         }
 
         private void finalise_sale(object sender, EventArgs e)
         {
-            DataTable dt = sales_data.DataSource as DataTable;
+            DataTable dt = SalesData.DataSource as DataTable;
             // TODO save the data to a database
         }
     }
