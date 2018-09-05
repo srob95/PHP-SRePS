@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 class DBConnect
 {
-    static void Main(string[] args)[]
     private MySqlConnection connection;
     private string server;
     private string database;
