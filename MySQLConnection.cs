@@ -16,7 +16,7 @@ class DBConnect
     private string password;
 
     //Constructor
-    public DBConnect()
+    static void Main(string[] args)
     {
         Initialize();
     }
@@ -38,45 +38,49 @@ class DBConnect
     //open connection to database
     private bool OpenConnection()
     {
-    }
+        try
+        {
+            connection.Open();
+            return true;
+        }
+     }
+     //Close connection
+        private bool CloseConnection()
+        {
+        }
 
-    //Close connection
-    private bool CloseConnection()
-    {
-    }
+        //Insert statement
+        public void Insert()
+        {
+        }
 
-    //Insert statement
-    public void Insert()
-    {
-    }
+        //Update statement
+        public void Update()
+        {
+        }
 
-    //Update statement
-    public void Update()
-    {
-    }
+        //Delete statement
+        public void Delete()
+        {
+        }
 
-    //Delete statement
-    public void Delete()
-    {
-    }
+        //Select statement
+        public List<string>[] Select()
+        {
+        }
 
-    //Select statement
-    public List<string>[] Select()
-    {
-    }
+        //Count statement
+        public int Count()
+        {
+        }
 
-    //Count statement
-    public int Count()
-    {
-    }
+        //Backup
+        public void Backup()
+        {
+        }
 
-    //Backup
-    public void Backup()
-    {
+        //Restore
+        public void Restore()
+        {
+        }
     }
-
-    //Restore
-    public void Restore()
-    {
-    }
-}
