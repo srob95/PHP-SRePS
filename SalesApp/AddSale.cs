@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SalesApp
 {
     public partial class AddSale : Form
     {
+        private readonly Database db;
 
-        public AddSale()
+        public AddSale(Database db)
         {
+            this.db = db;
             InitializeComponent();
 
             DataTable dt = new DataTable();
@@ -53,21 +50,14 @@ namespace SalesApp
             // TODO: This doesn't update properly when a row is added because the DataTable doesn't get the row added until after the event
             if (row < dt.Rows.Count)
             {
-                string itemno = dt.Rows[row]["ItemNo"].ToString();
-                string name = ItemManager.GetItemName(itemno);
-                float price = ItemManager.GetItemPrice(itemno);
+                int itemno = Int32.TryParse(dt.Rows[row]["ItemNo"].ToString(), out itemno) ? itemno : 0;
+                string name = db.GetAssetName(itemno);
+                double price = db.GetAssetPrice(itemno);
                 dt.Rows[row]["Description"] = name;
                 dt.Rows[row]["Item Price"] = price;
 
-                int qty;
-                try {
-                    qty = Int32.Parse(dt.Rows[row]["Qty"].ToString());
-                } catch (FormatException)
-                {
-                    qty = 1;
-                    dt.Rows[row]["Qty"] = qty;
-                }
-                float subPrice = price * qty;
+                int qty = Int32.TryParse(dt.Rows[row]["Qty"].ToString(), out qty) ? qty : 0;
+                double subPrice = price * qty;
                 dt.Rows[row]["SubPrice"] = subPrice;
             }
 
@@ -80,7 +70,7 @@ namespace SalesApp
             foreach (DataRow row in dt.Rows)
             {
                 String s_value = row["SubPrice"].ToString();
-                double value = Double.Parse(s_value); // since we set s_value, this should never crash...
+                double value = Double.TryParse(s_value, out value) ? value : 0;
                 sum += value;
             }
 
@@ -98,7 +88,28 @@ namespace SalesApp
         private void finalise_sale(object sender, EventArgs e)
         {
             DataTable dt = SalesData.DataSource as DataTable;
-            // TODO save the data to a database
+
+            List<SaleItem> items = new List<SaleItem>();
+           foreach (DataRow row in dt.Rows)
+            {
+                string s_item = row["ItemNo"].ToString();
+                string s_qty = row["Qty"].ToString();
+
+                int item = -1, qty = 1;
+                try
+                {
+                    // if either the item or qty are improperlly formatted, ignore the row
+                    item = int.Parse(s_item);
+                    qty = int.Parse(s_qty);
+
+                    items.Add(new SaleItem(item, qty));
+                }
+                catch (FormatException) { };
+            }
+
+            db.AddSale(items);
+
+            dt.Clear();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace SalesApp.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -57,6 +57,34 @@ namespace SalesApp.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///BEGIN TRANSACTION;
+        ///
+        ///CREATE TABLE IF NOT EXISTS `Asset` (
+        ///	`AssetID`     INTEGER PRIMARY KEY,
+        ///	`Name`        TEXT NOT NULL,
+        ///	`Description` TEXT NOT NULL,
+        ///	`Price`       REAL NOT NULL,
+        ///	`StockAmount` INTEGER NOT NULL DEFAULT 0
+        ///);
+        ///
+        ///CREATE TABLE IF NOT EXISTS `SalesRecord` (
+        ///	`SaleID`    INTEGER PRIMARY KEY AUTOINCREMENT,
+        ///	`Timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ///);
+        ///
+        ///CREATE TABLE IF NOT EXISTS `SalesAssets` (
+        ///	`SaleID`    INTEGER,
+        ///	`AssetID`   INTEGER,
+        ///	`Qty`       INTEGER NO [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SalesAppDatabaseInit {
+            get {
+                return ResourceManager.GetString("SalesAppDatabaseInit", resourceCulture);
             }
         }
     }
