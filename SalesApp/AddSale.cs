@@ -83,6 +83,8 @@ namespace SalesApp
             SubTotalValue.Text = sum.ToString();
             TaxValue.Text = tax.ToString();
             TotalValue.Text = total.ToString();
+
+            UpdateFinaliseStatus();
         }
 
         private void finalise_sale(object sender, EventArgs e)
@@ -107,9 +109,29 @@ namespace SalesApp
                 catch (FormatException) { };
             }
 
-            db.AddSale(items);
+            double amountPaid = (double)(CashValue.Value + EftposValue.Value);
+            db.AddSale(items, amountPaid);
 
             dt.Clear();
+        }
+
+        private void EftposChanged(object sender, EventArgs e)
+        {
+            CashValue.Value = 0;
+            UpdateFinaliseStatus();
+        }
+
+        private void CashChanged(object sender, EventArgs e)
+        {
+            EftposValue.Value = 0;
+            UpdateFinaliseStatus();
+        }
+
+
+        private void UpdateFinaliseStatus()
+        {
+            decimal total = Decimal.TryParse(TotalValue.Text, out total) ? total : 0;
+            FinaliseButton.Enabled = CashValue.Value + EftposValue.Value >= total;
         }
     }
 }
