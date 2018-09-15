@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
 using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SalesApp
 {
-    public partial class AddSale : Form
+    public partial class AddSale : UserControl
     {
-        private readonly Database db;
+        private Database db;
 
-        public AddSale(Database db)
+        public AddSale()
         {
-            this.db = db;
             InitializeComponent();
 
             DataTable dt = new DataTable();
@@ -32,6 +36,11 @@ namespace SalesApp
             SalesData.Columns["Item Price"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             SalesData.Columns["Qty"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             SalesData.Columns["SubPrice"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+        }
+
+        public void setDatabase(Database db)
+        {
+            this.db = db;
         }
 
         private void data_changed(object sender, DataGridViewCellEventArgs e)
@@ -87,12 +96,12 @@ namespace SalesApp
             UpdateFinaliseStatus();
         }
 
-        private void finalise_sale(object sender, EventArgs e)
+        private void finalise_sale(object sender, MouseEventArgs e)
         {
             DataTable dt = SalesData.DataSource as DataTable;
 
             List<SaleItem> items = new List<SaleItem>();
-           foreach (DataRow row in dt.Rows)
+            foreach (DataRow row in dt.Rows)
             {
                 string s_item = row["ItemNo"].ToString();
                 string s_qty = row["Qty"].ToString();
@@ -126,7 +135,6 @@ namespace SalesApp
             EftposValue.Value = 0;
             UpdateFinaliseStatus();
         }
-
 
         private void UpdateFinaliseStatus()
         {

@@ -18,7 +18,7 @@ namespace SalesApp
             // start the application
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AddSale(db));
+            Application.Run(new MainScreen(db));
         }
     }
 }
