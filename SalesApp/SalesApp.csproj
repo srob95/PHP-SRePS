@@ -90,6 +90,12 @@
     <Compile Include="AddSale.Designer.cs">
       <DependentUpon>AddSale.cs</DependentUpon>
     </Compile>
+    <Compile Include="MonthlyReport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MonthlyReport.Designer.cs">
+      <DependentUpon>MonthlyReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="SaleItem.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="MainScreen.cs">
@@ -105,6 +111,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainScreen.resx">
       <DependentUpon>MainScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MonthlyReport.resx">
+      <DependentUpon>MonthlyReport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

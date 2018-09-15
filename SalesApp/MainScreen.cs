@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace SalesApp
 {
@@ -11,6 +8,7 @@ namespace SalesApp
         {
             InitializeComponent();
             addSaleControl.setDatabase(db);
+            monthlyReportControl.setDatabase(db);
         }
     }
 }

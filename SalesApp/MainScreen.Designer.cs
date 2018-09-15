@@ -30,11 +30,13 @@
         {
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabAddSale = new System.Windows.Forms.TabPage();
-            this.addSaleControl = new SalesApp.AddSale();
             this.tabEditAssets = new System.Windows.Forms.TabPage();
             this.tabMonthlyReport = new System.Windows.Forms.TabPage();
+            this.addSaleControl = new SalesApp.AddSale();
+            this.monthlyReportControl = new SalesApp.MonthlyReport();
             this.tabControlMain.SuspendLayout();
             this.tabAddSale.SuspendLayout();
+            this.tabMonthlyReport.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -60,14 +62,6 @@
             this.tabAddSale.Text = "Add Sale";
             this.tabAddSale.UseVisualStyleBackColor = true;
             // 
-            // addSaleControl
-            // 
-            this.addSaleControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.addSaleControl.Location = new System.Drawing.Point(3, 3);
-            this.addSaleControl.Name = "addSaleControl";
-            this.addSaleControl.Size = new System.Drawing.Size(770, 529);
-            this.addSaleControl.TabIndex = 0;
-            // 
             // tabEditAssets
             // 
             this.tabEditAssets.Location = new System.Drawing.Point(4, 22);
@@ -80,6 +74,7 @@
             // 
             // tabMonthlyReport
             // 
+            this.tabMonthlyReport.Controls.Add(this.monthlyReportControl);
             this.tabMonthlyReport.Location = new System.Drawing.Point(4, 22);
             this.tabMonthlyReport.Name = "tabMonthlyReport";
             this.tabMonthlyReport.Padding = new System.Windows.Forms.Padding(3);
@@ -87,6 +82,22 @@
             this.tabMonthlyReport.TabIndex = 2;
             this.tabMonthlyReport.Text = "Monthly Report";
             this.tabMonthlyReport.UseVisualStyleBackColor = true;
+            // 
+            // addSaleControl
+            // 
+            this.addSaleControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.addSaleControl.Location = new System.Drawing.Point(3, 3);
+            this.addSaleControl.Name = "addSaleControl";
+            this.addSaleControl.Size = new System.Drawing.Size(770, 529);
+            this.addSaleControl.TabIndex = 0;
+            // 
+            // monthlyReportControl
+            // 
+            this.monthlyReportControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.monthlyReportControl.Location = new System.Drawing.Point(3, 3);
+            this.monthlyReportControl.Name = "monthlyReportControl";
+            this.monthlyReportControl.Size = new System.Drawing.Size(770, 529);
+            this.monthlyReportControl.TabIndex = 0;
             // 
             // MainScreen
             // 
@@ -98,6 +109,7 @@
             this.Text = "Add Sale";
             this.tabControlMain.ResumeLayout(false);
             this.tabAddSale.ResumeLayout(false);
+            this.tabMonthlyReport.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -108,6 +120,7 @@
         private System.Windows.Forms.TabPage tabEditAssets;
         private AddSale addSaleControl;
         private System.Windows.Forms.TabPage tabMonthlyReport;
+        private MonthlyReport monthlyReportControl;
     }
 }
 
