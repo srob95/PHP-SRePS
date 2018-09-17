@@ -13,6 +13,7 @@ namespace SalesApp
     public partial class AddSale : UserControl
     {
         private Database db;
+        private DataTable dt;
 
         public AddSale()
         {
@@ -20,16 +21,13 @@ namespace SalesApp
 
             DataTable dt = new DataTable();
             SalesData.DataSource = dt;
+            this.dt = dt;
 
             dt.Columns.Add("ItemNo");
             dt.Columns.Add("Description");
             dt.Columns.Add("Item Price");
             dt.Columns.Add("Qty");
             dt.Columns.Add("SubPrice");
-
-            SalesData.Columns["Description"].ReadOnly = true;
-            SalesData.Columns["Item Price"].ReadOnly = true;
-            SalesData.Columns["SubPrice"].ReadOnly = true;
 
             SalesData.Columns["ItemNo"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             SalesData.Columns["Description"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
@@ -43,32 +41,38 @@ namespace SalesApp
             this.db = db;
         }
 
-        private void data_changed(object sender, DataGridViewCellEventArgs e)
+        // Called from changing the value in the Eftpos box
+        private void EftposChanged(object sender, EventArgs e)
         {
-            DataTable dt = SalesData.DataSource as DataTable;
-            update_row_info(SalesData.DataSource as DataTable, e.RowIndex);
+            CashValue.Value = 0;
+            UpdateFinaliseStatus();
         }
 
-        private void data_row_added(object sender, DataGridViewRowsAddedEventArgs e)
+        // Called from changing the value in the cash box
+        private void CashChanged(object sender, EventArgs e)
         {
-            update_row_info(SalesData.DataSource as DataTable, e.RowIndex);
+            EftposValue.Value = 0;
+            UpdateFinaliseStatus();
         }
 
-        private void update_row_info(DataTable dt, int row)
+        private void UpdateFinaliseStatus()
         {
-            // TODO: This doesn't update properly when a row is added because the DataTable doesn't get the row added until after the event
-            if (row < dt.Rows.Count)
-            {
-                int itemno = Int32.TryParse(dt.Rows[row]["ItemNo"].ToString(), out itemno) ? itemno : 0;
-                string name = db.GetAssetName(itemno);
-                double price = db.GetAssetPrice(itemno);
-                dt.Rows[row]["Description"] = name;
-                dt.Rows[row]["Item Price"] = price;
+            decimal total = Decimal.TryParse(TotalValue.Text, out total) ? total : 0;
+            FinaliseButton.Enabled = CashValue.Value + EftposValue.Value >= total;
+        }
 
-                int qty = Int32.TryParse(dt.Rows[row]["Qty"].ToString(), out qty) ? qty : 0;
-                double subPrice = price * qty;
-                dt.Rows[row]["SubPrice"] = subPrice;
-            }
+        // Called from clicking on the AddItem button
+        private void AddItem(object sender, EventArgs e)
+        {
+            int itemno = (int)assetValue.Value;
+            string name = db.GetAssetName(itemno);
+            double price = db.GetAssetPrice(itemno);
+
+            int qty = (int)qtyValue.Value;
+            double subPrice = price * qty;
+
+            // Make sure the params here match the order of the datatable
+            dt.Rows.Add(itemno, name, price, qty, subPrice);
 
             update_totals_info(dt);
         }
@@ -122,24 +126,6 @@ namespace SalesApp
             db.AddSale(items, amountPaid);
 
             dt.Clear();
-        }
-
-        private void EftposChanged(object sender, EventArgs e)
-        {
-            CashValue.Value = 0;
-            UpdateFinaliseStatus();
-        }
-
-        private void CashChanged(object sender, EventArgs e)
-        {
-            EftposValue.Value = 0;
-            UpdateFinaliseStatus();
-        }
-
-        private void UpdateFinaliseStatus()
-        {
-            decimal total = Decimal.TryParse(TotalValue.Text, out total) ? total : 0;
-            FinaliseButton.Enabled = CashValue.Value + EftposValue.Value >= total;
         }
     }
 }
